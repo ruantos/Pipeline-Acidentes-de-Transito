@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_search_sql?"
 ENDPOINT_NAME = "http://dados.recife.pe.gov.br/api/3/action/package_list"
-ENDPOINT_ID = "http://dados.recife.pe.gov.br/api/3/action/package_show?id"
+ENDPOINT_ID = "http://dados.recife.pe.gov.br/api/3/action/package_show?id="
 identifier = "d153f88e-3c25-422b-8b94-ef8d660bf7bf"
 
 
@@ -16,7 +16,8 @@ def get_sets_ids(name_list: list[str]) -> list[str]:
 	for name in name_list:
 		try:
 			response = requests.get(f"{ENDPOINT_ID}{name}", timeout=60)
-			id_list.append(response.json())
+			id = response.json()['result']['id']
+			id_list.append(id)
 
 		except requests.exceptions.RequestException as e:
 			logger.warning(f"An error occurred while trying to fetch ids: {e}")
@@ -27,6 +28,7 @@ def get_sets_ids(name_list: list[str]) -> list[str]:
 
 def get_sets_names() -> list[str] | None:
 	word = 'acidentes'
+
 	try:
 		response = requests.get(url=ENDPOINT_NAME, timeout=60)
 		datastore = response.json()["result"]
@@ -38,9 +40,6 @@ def get_sets_names() -> list[str] | None:
 
 	except requests.exceptions.RequestException as e:
 		logger.warning(f"An error occurred while trying to fetch dataframe: {e}")
-
-
-
 
 
 def fetch_dataframes(identifier: str) -> pd.DataFrame:
@@ -67,4 +66,5 @@ def fetch_dataframes(identifier: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-	pass
+	names = get_sets_names()
+	print(get_sets_ids(names))
