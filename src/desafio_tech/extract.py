@@ -44,6 +44,5 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
 	ids = get_resources_ids()
-	dataframes = []
-	for id in ids:
-		dataframes.append(fetch_dataframe(id))
+	dataframes = [fetch_dataframe(identifier) for identifier in ids]
+
