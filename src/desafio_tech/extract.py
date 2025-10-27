@@ -4,50 +4,28 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_search_sql?"
-ENDPOINT_NAME = "http://dados.recife.pe.gov.br/api/3/action/package_list"
-ENDPOINT_ID = "http://dados.recife.pe.gov.br/api/3/action/package_show?id="
+ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_search_sql?sql="
+QUERY = "SELECT * FROM "
+DATASET = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=acidentes-de-transito-com-e-sem-vitimas"
 identifier = "d153f88e-3c25-422b-8b94-ef8d660bf7bf"
 
 
-def get_sets_ids(name_list: list[str]) -> list[str]:
-	id_list = []
-
-	for name in name_list:
-		try:
-			response = requests.get(f"{ENDPOINT_ID}{name}", timeout=60)
-			id = response.json()['result']['id']
-			id_list.append(id)
-
-		except requests.exceptions.RequestException as e:
-			logger.warning(f"An error occurred while trying to fetch ids: {e}")
-			return []
-
-	return id_list
-
-
-def get_sets_names() -> list[str] | None:
-	word = 'acidentes'
-
+def get_resources_ids() -> list[str]:
 	try:
-		response = requests.get(url=ENDPOINT_NAME, timeout=60)
-		datastore = response.json()["result"]
-
-		if not datastore:
-			logger.warning(f'No datasets found in the datastore for phrase: {word}')
-			return []
-		return [ds_name for ds_name in datastore if ds_name.startswith(word)]
+		response = requests.get(url=DATASET, timeout=60)
+		resources = response.json()['result']['resources']
+		return [resources[i]['id'] for i in range( len(resources) )]
 
 	except requests.exceptions.RequestException as e:
-		logger.warning(f"An error occurred while trying to fetch dataframe: {e}")
+		logger.warning(f"An error occurred while trying to fetch ids: {e}")
+		return []
 
 
 def fetch_dataframes(identifier: str) -> pd.DataFrame:
-	query = 'sql=SELECT * FROM '
-	url_params = f'{ENDPOINT}{query}"{identifier}"'
-
+	query = f'SELECT * FROM "{identifier}"'
+	url = f'{ENDPOINT}{query}'
 	try:
-		response = requests.get(url_params, timeout=60)
+		response = requests.get(url=url, timeout=60)
 		records = response.json()["result"]["records"]
 		if not records:
 			logger.warning(f'No records found for dataset: {identifier}')
@@ -66,5 +44,6 @@ def fetch_dataframes(identifier: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-	names = get_sets_names()
-	print(get_sets_ids(names))
+	ids = get_resources_ids()
+	for id in ids:
+		print(type(fetch_dataframes(id)))
