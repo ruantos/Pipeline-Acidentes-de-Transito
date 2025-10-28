@@ -13,8 +13,10 @@ DATASET_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=a
 
 def get_ids() -> list[str]:
 	try:
+		logger.info("Fetching resources id's...")
 		response = requests.get(url=DATASET_ENDPOINT, timeout=60)
 		resources = response.json()['result']['resources']
+		logger.info("ID's acquired successfully")
 		return [res['id'] for res in resources if res['datastore_active']]
 
 	except requests.exceptions.RequestException as e:
@@ -27,11 +29,13 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 	url = f'{DATASTORE_ENDPOINT}{query}'
 
 	try:
+		logger.info(f"Fetching {identifier} dataframe")
 		response = requests.get(url=url, timeout=60)
-		response.raise_for_status()
 		records = response.json()["result"]["records"]
 		if not records:
 			logger.info(f'No records found for dataset: {identifier}')
+
+		logger.info(f"Dataframe fetched successfully")
 		return pd.DataFrame(records)
 
 	except KeyError as e:
