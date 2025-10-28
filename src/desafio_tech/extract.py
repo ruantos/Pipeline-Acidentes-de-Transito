@@ -1,5 +1,3 @@
-from os.path import exists
-
 import requests
 import pandas as pd
 import logging
@@ -63,7 +61,6 @@ def save_dataframe(df: pd.DataFrame):
 
 	except Exception as e:
 		logger.warning(f"An error occurred while trying to save the dataframe: {e}")
-
 
 
 if __name__ == "__main__":
