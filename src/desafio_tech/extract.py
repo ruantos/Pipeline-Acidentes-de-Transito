@@ -35,7 +35,7 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 		if not records:
 			logger.info(f'No records found for dataset: {identifier}')
 
-		logger.info(f"Dataframe fetched successfully\n")
+		logger.info(f"Dataframe fetched successfully")
 
 		df = pd.DataFrame(records)
 		return normalize_names(df)
