@@ -1,7 +1,6 @@
 import requests
 import pandas as pd
 import logging
-import os
 
 
 logging.basicConfig(level=logging.INFO)
