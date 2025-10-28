@@ -35,7 +35,7 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 		if not records:
 			logger.info(f'No records found for dataset: {identifier}')
 
-		logger.info(f"Dataframe fetched successfully")
+		logger.info(f"Dataframe fetched successfully\n")
 		return pd.DataFrame(records)
 
 	except KeyError as e:
@@ -68,7 +68,7 @@ def save_dataframe(df: pd.DataFrame):
 
 
 if __name__ == "__main__":
-	ids = get_resources_ids()
+	ids = get_ids()
 	dataframes = [fetch_dataframe(identifier) for identifier in ids]
 	for df in dataframes:
 		save_dataframe(df)
