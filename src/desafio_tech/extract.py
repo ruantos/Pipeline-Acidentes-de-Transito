@@ -11,7 +11,7 @@ DATASTORE_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_searc
 DATASET_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=acidentes-de-transito-com-e-sem-vitimas"
 
 
-def get_resources_ids() -> list[str]:
+def get_ids() -> list[str]:
 	try:
 		response = requests.get(url=DATASET_ENDPOINT, timeout=60)
 		resources = response.json()['result']['resources']
