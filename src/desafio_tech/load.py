@@ -3,7 +3,6 @@ import logging
 import pandas as pd
 
 logger = logging.getLogger(__name__)
-DB_PATH = "../../data/acidentes_de_transito.bd"
 USED_COLS = ['hora', 'pedestre', 'ciclista', 'moto', 'tipo',
        'caminhao', 'auto', 'bairro',
        'onibus', 'data', 'vitimas',
@@ -27,9 +26,13 @@ class Loader:
 		if not self.conn:
 			logger.warning("No db connection founded!")
 		else:
-			self.create_bronze()
-			df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
-
+			try:
+				self.create_bronze()
+				df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
+			except KeyError as e:
+				logger.warning(f"Key Error caught while inserting records in Bronze: {e}")
+			except Exception as e:
+				logger.warning(f"Error caught while inserting records in Bronze: {e}")
 
 	def create_bronze(self):
 		if not self.conn:
@@ -58,5 +61,3 @@ class Loader:
 
 	def close(self) -> None:
 		self.conn.close()
-
-
