@@ -12,15 +12,13 @@ USED_COLS = ['hora', 'pedestre', 'ciclista', 'moto', 'tipo',
 
 class Loader:
 	def __init__(self, db_path: str) -> None:
-		self.cursor = self.conn= None
-		self.db_path = db_path
-
-	def connect(self) -> None:
+		logger.info(f"Connecting to database..")
 		try:
-			self.conn = sqlite3.connect(self.db_path)
+			self.conn = sqlite3.connect(db_path)
 			self.cur = self.conn.cursor()
+			logger.info("Connection was successful")
 		except Exception as e:
-			logging.info(f"Error caught while trying to connect to database {e}")
+			logger.info(f"Error caught while trying to connect to database {e}")
 
 
 	def insert_bronze(self, df: pd.DataFrame) -> None:
@@ -54,3 +52,5 @@ class Loader:
 
 	def close(self) -> None:
 		self.conn.close()
+
+
