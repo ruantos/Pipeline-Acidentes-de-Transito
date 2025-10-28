@@ -24,30 +24,36 @@ class Loader:
 	def insert_bronze(self, df: pd.DataFrame) -> None:
 		df = df[USED_COLS]
 
-		self.create_bronze()
-		df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
+		if not self.conn:
+			logger.warning("No db connection founded!")
+		else:
+			self.create_bronze()
+			df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
 
 
 	def create_bronze(self):
-		self.cur.execute("""
-			CREATE TABLE IF NOT EXISTS bronze_acidentes (
-			    id INTEGER PRIMARY KEY AUTOINCREMENT,
-			    hora TEXT,
-			    pedestre INTEGER,
-			    ciclista INTEGER,
-			    moto INTEGER,
-			    tipo TEXT,
-			    caminhao INTEGER,
-			    auto INTEGER,
-			    bairro TEXT NOT NULL,
-			    onibus INTEGER,
-			    data TEXT,
-			    vitimas INTEGER,
-			    endereco TEXT,
-			    viatura TEXT
-			);
-			""")
-		self.conn.commit()
+		if not self.conn:
+			logger.warning("No db connection founded!")
+		else:
+			self.cur.execute("""
+				CREATE TABLE IF NOT EXISTS bronze_acidentes (
+				    id INTEGER PRIMARY KEY AUTOINCREMENT,
+				    hora TEXT,
+				    pedestre INTEGER,
+				    ciclista INTEGER,
+				    moto INTEGER,
+				    tipo TEXT,
+				    caminhao INTEGER,
+				    auto INTEGER,
+				    bairro TEXT NOT NULL,
+				    onibus INTEGER,
+				    data TEXT,
+				    vitimas INTEGER,
+				    endereco TEXT,
+				    viatura TEXT
+				);
+				""")
+			self.conn.commit()
 
 
 	def close(self) -> None:
