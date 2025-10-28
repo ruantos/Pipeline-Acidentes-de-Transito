@@ -16,7 +16,7 @@ def get_ids() -> list[str]:
 		logger.info("Fetching resources id's...")
 		response = requests.get(url=DATASET_ENDPOINT, timeout=60)
 		resources = response.json()['result']['resources']
-		logger.info("ID's acquired successfully")
+		logger.info("ID's acquired successfully\n")
 		return [res['id'] for res in resources if res['datastore_active']]
 
 	except requests.exceptions.RequestException as e:
