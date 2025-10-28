@@ -22,6 +22,7 @@ class Loader:
 
 	def insert_bronze(self, df: pd.DataFrame) -> None:
 		df = df[USED_COLS]
+		year = str(df['data'].iloc[0].split("-")[0])
 
 		if not self.conn:
 			logger.warning("No db connection founded!")
@@ -29,6 +30,7 @@ class Loader:
 			try:
 				self.create_bronze()
 				df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
+				logger.info(f"{year} Dataframe inserted successfully")
 			except KeyError as e:
 				logger.warning(f"Key Error caught while inserting records in Bronze: {e}")
 			except Exception as e:
