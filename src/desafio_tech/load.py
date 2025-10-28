@@ -30,7 +30,7 @@ class Loader:
 			try:
 				self.create_bronze()
 				df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
-				logger.info(f"{year} Dataframe inserted successfully")
+				logger.info(f"{year} Dataframe inserted successfully\n")
 			except KeyError as e:
 				logger.warning(f"Key Error caught while inserting records in Bronze: {e}")
 			except Exception as e:
