@@ -12,5 +12,5 @@ if __name__ == "__main__":
 
 	for identifier in ids:
 		df = fetch_dataframe(identifier)
-		loader.insert_bronze(df)
+		loader.create_bronze(df)
 	loader.close()

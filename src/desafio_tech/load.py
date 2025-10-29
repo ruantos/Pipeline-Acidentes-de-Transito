@@ -25,7 +25,7 @@ class Loader:
 			self.conn = None
 
 
-	def insert_bronze(self, df: pd.DataFrame) -> None:
+	def create_bronze(self, df: pd.DataFrame) -> None:
 		"""
 		Inserir os registros do daframe passado como parâmetro à tabela bronze_acidentes
 		Algumas colunas são filtradas para padronização dos múltiplos recursos
@@ -34,15 +34,13 @@ class Loader:
 		"""
 		if df.empty:
 			return
-		df = df[USED_COLS]
-		year = str(df['data'].iloc[0].split("-")[0])
 
 		if not self.conn:
 			logger.warning("No db connection founded!")
 		else:
 			try:
-				self.create_bronze()
-				self.conn.execute("INSERT INTO bronze_acidentes SELECT * FROM df")
+				year = self.get_year(df)
+				self.conn.execute(F"CREATE TABLE bronze_acidentes_{year} AS SELECT * FROM df")
 				logger.info(f"{year} Dataframe inserted successfully\n")
 
 			except KeyError as e:
@@ -51,32 +49,9 @@ class Loader:
 			except Exception as e:
 				logger.error(f"Error caught while inserting records in Bronze: {e}")
 
-	def create_bronze(self):
-		"""
-		Cria a tabela bronze_acidentes no banco duckdb
-		:return:
-		"""
-		if not self.conn:
-			logger.warning("No db connection founded!")
-		else:
-			self.conn.execute("""
-				CREATE TABLE IF NOT EXISTS bronze_acidentes (
-				    _id VARCHAR(200),
-				    hora VARCHAR(200),
-				    pedestre VARCHAR(5),
-				    ciclista VARCHAR(5),
-				    moto VARCHAR(5),
-				    tipo VARCHAR(200),
-				    caminhao VARCHAR(5),
-				    auto VARCHAR(5),
-				    bairro VARCHAR(255),
-				    onibus VARCHAR(5),
-				    data VARCHAR(200),
-				    vitimas VARCHAR(5),
-				    endereco VARCHAR(255),
-				    viatura VARCHAR(255)
-				)
-				""")
+
+	def get_year(self, df: pd.DataFrame) -> str:
+		return str(df['data'].iloc[0].split("-")[0])
 
 
 	def close(self) -> None:
