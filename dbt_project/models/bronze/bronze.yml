@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: bronze
+    schema: main
+    tables:
+      - name: bronze_acidentes_2015
+      - name: bronze_acidentes_2016
+      - name: bronze_acidentes_2017
+      - name: bronze_acidentes_2018
+      - name: bronze_acidentes_2019
+      - name: bronze_acidentes_2020
+      - name: bronze_acidentes_2021
+      - name: bronze_acidentes_2022
+      - name: bronze_acidentes_2023
+      - name: bronze_acidentes_2024

@@ -14,7 +14,7 @@ with bronze_acidentes_2024 as (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2024') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2024') }}
 
 ),
 
@@ -34,7 +34,7 @@ bronze_acidentes_2023 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2023') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2023') }}
 
 ),
 
@@ -54,7 +54,7 @@ bronze_acidentes_2022 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2022') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2022') }}
 
 ),
 
@@ -74,7 +74,7 @@ bronze_acidentes_2021 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2021') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2021') }}
 
 ),
 
@@ -94,7 +94,7 @@ bronze_acidentes_2020 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2020') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2020') }}
 
 ),
 
@@ -114,7 +114,7 @@ bronze_acidentes_2019 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2019') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2019') }}
 
 ),
 
@@ -134,7 +134,7 @@ bronze_acidentes_2018 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2018') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2018') }}
 
 ),
 
@@ -154,7 +154,7 @@ bronze_acidentes_2017 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2017') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2017') }}
 
 ),
 
@@ -174,7 +174,7 @@ bronze_acidentes_2016 AS (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2016') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2016') }}
 
 ),
 
@@ -194,26 +194,26 @@ bronze_acidentes_2015 as (
         viatura,
         ciclista,
         pedestre
-    FROM {{ ref('bronze_acidentes_2015') }}
+    FROM {{ source('bronze', 'bronze_acidentes_2015') }}
 
-),
+)
 
-select * from bronze_acidentes_2024
-union all
-select * from bronze_acidentes_2023
-union all
-select * from bronze_acidentes_2022
-union all
-select * from bronze_acidentes_2021
-union all
-select * from bronze_acidentes_2020
-union all
-select * from bronze_acidentes_2019
-union all
-select * from bronze_acidentes_2018
-union all
-select * from bronze_acidentes_2017
-union all
-select * from bronze_acidentes_2016
-union all
-select * from bronze_acidentes_2015
+SELECT * FROM bronze_acidentes_2024
+UNION ALL
+SELECT * FROM bronze_acidentes_2023
+UNION ALL
+SELECT * FROM bronze_acidentes_2022
+UNION ALL
+SELECT * FROM bronze_acidentes_2021
+UNION ALL
+SELECT * FROM bronze_acidentes_2020
+UNION ALL
+SELECT * FROM bronze_acidentes_2019
+UNION ALL
+SELECT * FROM bronze_acidentes_2018
+UNION ALL
+SELECT * FROM bronze_acidentes_2017
+UNION ALL
+SELECT * FROM bronze_acidentes_2016
+UNION ALL
+SELECT * FROM bronze_acidentes_2015
