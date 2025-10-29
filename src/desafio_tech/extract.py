@@ -39,7 +39,7 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 		logger.info(f"Dataframe fetched successfully")
 
 		df = pd.DataFrame(records)
-		return normalize_names(df)
+		return normalize_cols(df)
 
 	except KeyError as e:
 		logger.error(f'No records found for dataset: {identifier}\nError: {e}')
