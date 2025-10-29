@@ -16,3 +16,4 @@ SELECT ano,
        total_vitimas,
        (total_vitimas / 12) AS "media_vitimas_mes"
 FROM gold_acidentes_ano
+LIMIT 10

@@ -13,3 +13,4 @@ SELECT hora,
 FROM gold_pico_acidentes
 GROUP BY hora
 ORDER BY num_acidentes DESC
+LIMIT 10
