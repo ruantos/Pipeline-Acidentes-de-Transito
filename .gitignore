@@ -3,3 +3,5 @@ poetry.lock
 .env
 __pycache__
 acidentes_de_transito.bd
+data/
+logs/

@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import logging
+import time
 
 
 logging.basicConfig(level=logging.INFO)
@@ -11,6 +12,11 @@ DATASET_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=a
 
 
 def get_ids() -> list[str]:
+	"""
+		Faz uma requisição à API do Portal de Dados abertos de Recife pelo dataset
+		'acidentes-de-transito-com-e-sem-vitimas' e retorna uma lista com IDs dos recursos desse dataset
+	:return: list[str]
+	"""
 	try:
 		logger.info("Fetching resources id's...")
 		response = requests.get(url=DATASET_ENDPOINT, timeout=60)
@@ -24,33 +30,56 @@ def get_ids() -> list[str]:
 
 
 def fetch_dataframe(identifier: str) -> pd.DataFrame:
+	"""
+		Faz uma requisição à API do Portal de Dados abertos de Recife
+		Envia uma consulta SQL para retornar todos os registros do recurso do 'identifier' passado como argumento
+	:param identifier:
+	:return:
+	"""
+	wait_time = 5
+	tries = 3
+
 	params = {
 		'sql': f' SELECT * FROM "{identifier}" '
 	}
+	for call in range(tries):
+		try:
+			logger.info(f"Fetching {identifier} dataframe...")
+			response = requests.get(url=DATASTORE_ENDPOINT, params=params, timeout=60)
+			response.raise_for_status()
+			records = response.json()["result"]["records"]
+			if not records:
+				logger.info(f'No records found for dataset: {identifier}')
 
-	try:
-		logger.info(f"Fetching {identifier} dataframe")
-		response = requests.get(url=DATASTORE_ENDPOINT, params=params, timeout=60)
-		response.raise_for_status()
-		records = response.json()["result"]["records"]
-		if not records:
-			logger.info(f'No records found for dataset: {identifier}')
+			logger.info(f"Dataframe fetched successfully")
 
-		logger.info(f"Dataframe fetched successfully")
+			df = pd.DataFrame(records)
+			return normalize_cols(df)
 
-		df = pd.DataFrame(records)
-		return normalize_cols(df)
+		except KeyError as e:
+			logger.error(f'No records found for dataset: {identifier}\nError: {e}')
+			return pd.DataFrame()
 
-	except KeyError as e:
-		logger.error(f'No records found for dataset: {identifier}\nError: {e}')
-		return pd.DataFrame()
+		except requests.exceptions.RequestException as e:
+			logger.error(f"An error ({response.status_code}) occurred while trying to fetch dataframe: {e}")
 
-	except requests.exceptions.RequestException as e:
-		logger.error(f"An error ({response.status_code}) occurred while trying to fetch dataframe: {e}")
-		return pd.DataFrame()
+			if call < (tries - 1):
+				logger.info(f"Retrying in {wait_time} seconds...")
+				time.sleep(wait_time)
+			else:
+				logger.error("Max retries... Moving to the next dataframe\n")
+				return pd.DataFrame()
+
+	return pd.DataFrame()
 
 
 def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
+	"""
+		Converte o nome de todas as colunas do dataframe para minúsculas para que não haja divergências.
+		Além disso soma valores ao id para que ao concatenar os IDs dos recursos permaneçam únicos.
+	:param df:
+	:return:
+	"""
 	df.columns = [col.lower() for col in df.columns]
 	year = df['data'].iloc[0].split("-")[0]
 	df["_id"] = df["_id"].astype(str) + year + '0'
