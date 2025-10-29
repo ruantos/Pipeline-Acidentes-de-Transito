@@ -3,10 +3,6 @@ import logging
 import pandas as pd
 
 logger = logging.getLogger(__name__)
-USED_COLS = ['_id', 'hora', 'pedestre', 'ciclista', 'moto', 'tipo',
-       'caminhao', 'auto', 'bairro',
-       'onibus', 'data', 'vitimas',
-       'endereco', 'viatura']
 
 
 class Loader:
@@ -51,7 +47,14 @@ class Loader:
 
 
 	def get_year(self, df: pd.DataFrame) -> str:
+		"""
+		Retorna o ano ao qual o dafataframe se refere
+		:param df:
+		:return:
+		"""
 		return str(df['data'].iloc[0].split("-")[0])
+
+
 
 
 	def close(self) -> None:
