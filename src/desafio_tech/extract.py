@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DATASTORE_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_search_sql?sql="
+DATASTORE_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/datastore_search_sql"
 DATASET_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=acidentes-de-transito-com-e-sem-vitimas"
 
 
@@ -24,12 +24,14 @@ def get_ids() -> list[str]:
 
 
 def fetch_dataframe(identifier: str) -> pd.DataFrame:
-	query = f'SELECT * FROM "{identifier};"'
-	url = f'{DATASTORE_ENDPOINT}{query}'
+	params = {
+		'sql': f' SELECT * FROM "{identifier}" '
+	}
 
 	try:
 		logger.info(f"Fetching {identifier} dataframe")
-		response = requests.get(url=url, timeout=60)
+		response = requests.get(url=DATASTORE_ENDPOINT, params=params, timeout=60)
+		response.raise_for_status()
 		records = response.json()["result"]["records"]
 		if not records:
 			logger.info(f'No records found for dataset: {identifier}')
@@ -44,10 +46,12 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 		return pd.DataFrame()
 
 	except requests.exceptions.RequestException as e:
-		logger.error(f"An error occurred while trying to fetch dataframe: {e}")
+		logger.error(f"An error ({response.status_code}) occurred while trying to fetch dataframe: {e}")
 		return pd.DataFrame()
 
 
-def normalize_names(df: pd.DataFrame) -> pd.DataFrame:
+def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
 	df.columns = [col.lower() for col in df.columns]
+	year = df['data'].iloc[0].split("-")[0]
+	df["_id"] = df["_id"].astype(str) + year
 	return df
