@@ -1,3 +1,8 @@
+-- Esse modelo padroniza e atribui os datatypes corretos às colunas das
+-- tabelas raw no duckdb e concatena-as (as tabelas) em uma só
+
+-- gravidade: nova coluna criada para possível análise da gravidade da ocorrência
+-- à partir da quantidade de feridos envolvidos
 WITH bronze_acidentes_2024 AS (
     SELECT
         _id,
