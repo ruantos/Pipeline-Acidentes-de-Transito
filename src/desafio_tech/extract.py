@@ -53,5 +53,5 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
 	df.columns = [col.lower() for col in df.columns]
 	year = df['data'].iloc[0].split("-")[0]
-	df["_id"] = df["_id"].astype(str) + year
+	df["_id"] = df["_id"].astype(str) + year + '0'
 	return df
