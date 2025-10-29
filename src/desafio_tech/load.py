@@ -1,9 +1,9 @@
-import sqlite3
+import duckdb
 import logging
 import pandas as pd
 
 logger = logging.getLogger(__name__)
-USED_COLS = ['hora', 'pedestre', 'ciclista', 'moto', 'tipo',
+USED_COLS = ['_id', 'hora', 'pedestre', 'ciclista', 'moto', 'tipo',
        'caminhao', 'auto', 'bairro',
        'onibus', 'data', 'vitimas',
        'endereco', 'viatura']
@@ -11,16 +11,18 @@ USED_COLS = ['hora', 'pedestre', 'ciclista', 'moto', 'tipo',
 
 class Loader:
 	def __init__(self, db_path: str) -> None:
-		logger.info(f"Connecting to database..")
+		logger.info(f"Connecting to duckdatabase..")
 		try:
-			self.conn = sqlite3.connect(db_path)
-			self.cur = self.conn.cursor()
+			self.conn = duckdb.connect(database=db_path)
 			logger.info("Connection was successful")
 		except Exception as e:
 			logger.info(f"Error caught while trying to connect to database {e}")
+			self.conn = None
 
 
 	def insert_bronze(self, df: pd.DataFrame) -> None:
+		if df.empty:
+			return
 		df = df[USED_COLS]
 		year = str(df['data'].iloc[0].split("-")[0])
 
@@ -29,37 +31,40 @@ class Loader:
 		else:
 			try:
 				self.create_bronze()
-				df.to_sql("bronze_acidentes", self.conn, if_exists="append", index=False)
+				self.conn.execute("INSERT INTO bronze_acidentes SELECT * FROM df")
 				logger.info(f"{year} Dataframe inserted successfully\n")
+
 			except KeyError as e:
-				logger.warning(f"Key Error caught while inserting records in Bronze: {e}")
+				logger.error(f"Key Error caught while inserting records in Bronze: {e}")
+
 			except Exception as e:
-				logger.warning(f"Error caught while inserting records in Bronze: {e}")
+				logger.error(f"Error caught while inserting records in Bronze: {e}")
 
 	def create_bronze(self):
 		if not self.conn:
 			logger.warning("No db connection founded!")
 		else:
-			self.cur.execute("""
+			self.conn.execute("""
 				CREATE TABLE IF NOT EXISTS bronze_acidentes (
-				    id INTEGER PRIMARY KEY AUTOINCREMENT,
-				    hora TEXT,
-				    pedestre INTEGER,
-				    ciclista INTEGER,
-				    moto INTEGER,
-				    tipo TEXT,
-				    caminhao INTEGER,
-				    auto INTEGER,
-				    bairro TEXT NOT NULL,
-				    onibus INTEGER,
-				    data TEXT,
-				    vitimas INTEGER,
-				    endereco TEXT,
-				    viatura TEXT
-				);
+				    _id VARCHAR(200),
+				    hora VARCHAR(200),
+				    pedestre VARCHAR(5),
+				    ciclista VARCHAR(5),
+				    moto VARCHAR(5),
+				    tipo VARCHAR(200),
+				    caminhao VARCHAR(5),
+				    auto VARCHAR(5),
+				    bairro VARCHAR(255),
+				    onibus VARCHAR(5),
+				    data VARCHAR(200),
+				    vitimas VARCHAR(5),
+				    endereco VARCHAR(255),
+				    viatura VARCHAR(255)
+				)
 				""")
-			self.conn.commit()
 
 
 	def close(self) -> None:
-		self.conn.close()
+		if self.conn:
+			self.conn.close()
+			logger.info("Closed duckdb connection successfully!")
