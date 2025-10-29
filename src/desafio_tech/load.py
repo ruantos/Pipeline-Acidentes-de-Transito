@@ -14,7 +14,7 @@ class Loader:
 		logger.info(f"Connecting to duckdatabase..")
 		try:
 			self.conn = duckdb.connect(database=db_path)
-			logger.info("Connection was successful")
+			logger.info("Connection was successful\n")
 		except Exception as e:
 			logger.info(f"Error caught while trying to connect to database {e}")
 			self.conn = None

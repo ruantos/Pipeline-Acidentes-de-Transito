@@ -1,6 +1,7 @@
 import requests
 import pandas as pd
 import logging
+import time
 
 
 logging.basicConfig(level=logging.INFO)
@@ -24,30 +25,41 @@ def get_ids() -> list[str]:
 
 
 def fetch_dataframe(identifier: str) -> pd.DataFrame:
+	wait_time = 5
+	tries = 3
+
 	params = {
 		'sql': f' SELECT * FROM "{identifier}" '
 	}
+	for call in range(tries):
+		try:
+			logger.info(f"Fetching {identifier} dataframe...")
+			response = requests.get(url=DATASTORE_ENDPOINT, params=params, timeout=60)
+			response.raise_for_status()
+			records = response.json()["result"]["records"]
+			if not records:
+				logger.info(f'No records found for dataset: {identifier}')
 
-	try:
-		logger.info(f"Fetching {identifier} dataframe")
-		response = requests.get(url=DATASTORE_ENDPOINT, params=params, timeout=60)
-		response.raise_for_status()
-		records = response.json()["result"]["records"]
-		if not records:
-			logger.info(f'No records found for dataset: {identifier}')
+			logger.info(f"Dataframe fetched successfully")
 
-		logger.info(f"Dataframe fetched successfully")
+			df = pd.DataFrame(records)
+			return normalize_cols(df)
 
-		df = pd.DataFrame(records)
-		return normalize_cols(df)
+		except KeyError as e:
+			logger.error(f'No records found for dataset: {identifier}\nError: {e}')
+			return pd.DataFrame()
 
-	except KeyError as e:
-		logger.error(f'No records found for dataset: {identifier}\nError: {e}')
-		return pd.DataFrame()
+		except requests.exceptions.RequestException as e:
+			logger.error(f"An error ({response.status_code}) occurred while trying to fetch dataframe: {e}")
 
-	except requests.exceptions.RequestException as e:
-		logger.error(f"An error ({response.status_code}) occurred while trying to fetch dataframe: {e}")
-		return pd.DataFrame()
+			if call < (tries - 1):
+				logger.info(f"Retrying in {wait_time} seconds...")
+				time.sleep(wait_time)
+			else:
+				logger.error("Max retries... Moving to the next dataframe\n")
+				return pd.DataFrame()
+
+	return pd.DataFrame()
 
 
 def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
