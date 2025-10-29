@@ -8,7 +8,7 @@ WITH bronze_acidentes_2024 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -32,7 +32,7 @@ bronze_acidentes_2023 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -56,7 +56,7 @@ bronze_acidentes_2022 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -80,7 +80,7 @@ bronze_acidentes_2021 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -104,7 +104,7 @@ bronze_acidentes_2020 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -128,7 +128,7 @@ bronze_acidentes_2019 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -152,7 +152,7 @@ bronze_acidentes_2018 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         tempo_clima,
@@ -176,7 +176,7 @@ bronze_acidentes_2017 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         NULL::VARCHAR AS tempo_clima,
@@ -200,7 +200,7 @@ bronze_acidentes_2016 AS (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         NULL::VARCHAR AS tempo_clima,
@@ -224,7 +224,7 @@ bronze_acidentes_2015 as (
             WHEN CAST(REPLACE(vitimas, ',', '.') AS INTEGER) < 3 THEN 'moderado'
             ELSE 'grave'
         END AS gravidade,
-        hora,
+        TRY_CAST(hora AS TIME) AS horario,
         CAST(SUBSTR(data, 1, 10) AS DATE) AS data,
         bairro,
         NULL::VARCHAR AS tempo_clima,

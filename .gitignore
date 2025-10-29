@@ -4,4 +4,6 @@ poetry.lock
 __pycache__
 acidentes_de_transito.bd
 data/
+target/
+dbt_packages/
 logs/
