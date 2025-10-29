@@ -19,12 +19,12 @@ def get_ids() -> list[str]:
 		return [res['id'] for res in resources if res['datastore_active']]
 
 	except requests.exceptions.RequestException as e:
-		logger.warning(f"An error occurred while trying to fetch ids: {e}")
+		logger.error(f"An error occurred while trying to fetch ids: {e}")
 		return []
 
 
 def fetch_dataframe(identifier: str) -> pd.DataFrame:
-	query = f'SELECT * FROM "{identifier}"'
+	query = f'SELECT * FROM "{identifier};"'
 	url = f'{DATASTORE_ENDPOINT}{query}'
 
 	try:
@@ -40,11 +40,11 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 		return normalize_names(df)
 
 	except KeyError as e:
-		logger.warning(f'No records found for dataset: {identifier}\nError: {e}')
+		logger.error(f'No records found for dataset: {identifier}\nError: {e}')
 		return pd.DataFrame()
 
 	except requests.exceptions.RequestException as e:
-		logger.warning(f"An error occurred while trying to fetch dataframe: {e}")
+		logger.error(f"An error occurred while trying to fetch dataframe: {e}")
 		return pd.DataFrame()
 
 
