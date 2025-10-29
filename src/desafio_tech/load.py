@@ -35,13 +35,12 @@ class Loader:
 		if df.empty:
 			return
 
-
 		if not self.conn:
 			logger.warning("No db connection founded!")
 		else:
 			try:
 				year = self.get_year(df)
-				self.conn.execute(F"CREATE TABLE bronze_acidentes_{year} SELECT * FROM df")
+				self.conn.execute(F"CREATE TABLE bronze_acidentes_{year} AS SELECT * FROM df")
 				logger.info(f"{year} Dataframe inserted successfully\n")
 
 			except KeyError as e:
