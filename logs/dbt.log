@@ -1,0 +1,31 @@
+[0m02:30:49.423663 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33cba657f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33cf3ac2d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33cb0e8410>]}
+
+
+============================== 02:30:49.462610 | d85bea93-a04c-4d78-a6ba-5f3dd78a81ec ==============================
+[0m02:30:49.462610 [info ] [MainThread]: Running with dbt=1.10.13
+[0m02:30:49.463377 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'fail_fast': 'False', 'debug': 'False', 'introspect': 'True', 'quiet': 'False', 'empty': 'None', 'no_print': 'None', 'cache_selected_only': 'False', 'warn_error': 'None', 'log_format': 'default', 'partial_parse': 'True', 'log_cache_events': 'False', 'use_experimental_parser': 'False', 'use_colors': 'True', 'write_json': 'True', 'log_path': 'logs', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'profiles_dir': '/home/ruantos/.dbt', 'version_check': 'True', 'indirect_selection': 'eager', 'send_anonymous_usage_stats': 'True', 'target_path': 'None', 'printer_width': '80', 'invocation_command': 'dbt init dbt_project'}
+[0m02:30:49.510044 [info ] [MainThread]: Creating dbt configuration folder at /home/ruantos/.dbt
+[0m02:30:49.512043 [debug] [MainThread]: Starter project path: /home/ruantos/.cache/pypoetry/virtualenvs/desafio-tech-l5L7q5e5-py3.13/lib/python3.13/site-packages/dbt/include/starter_project
+[0m02:30:49.516517 [info ] [MainThread]: 
+Your new dbt project "dbt_project" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m02:30:49.516977 [info ] [MainThread]: Setting up your profile.
+[0m02:31:12.422909 [info ] [MainThread]: Profile dbt_project written to /home/ruantos/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m02:31:12.462071 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 23.100666, "process_in_blocks": "5912", "process_kernel_time": 0.348324, "process_mem_max_rss": "160244", "process_out_blocks": "32024", "process_user_time": 4.475179}
+[0m02:31:12.464083 [debug] [MainThread]: Command `dbt init` succeeded at 02:31:12.463658 after 23.10 seconds
+[0m02:31:12.465515 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33ca9d3820>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33cba86d50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f33ca6cabe0>]}
+[0m02:31:12.467138 [debug] [MainThread]: Flushing usage events
+[0m02:31:13.385455 [debug] [MainThread]: An error was encountered while trying to flush usage events
