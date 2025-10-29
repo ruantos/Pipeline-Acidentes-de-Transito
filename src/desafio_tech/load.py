@@ -10,7 +10,12 @@ USED_COLS = ['_id', 'hora', 'pedestre', 'ciclista', 'moto', 'tipo',
 
 
 class Loader:
+	""" Classe responsável por se conectar ao banco, criar schemas e inserir os dados """
+
 	def __init__(self, db_path: str) -> None:
+		"""
+		Construtor da classe Loader. Inicializa objeto e se conecta ao banco duckdb
+		"""
 		logger.info(f"Connecting to duckdatabase..")
 		try:
 			self.conn = duckdb.connect(database=db_path)
@@ -21,6 +26,12 @@ class Loader:
 
 
 	def insert_bronze(self, df: pd.DataFrame) -> None:
+		"""
+		Inserir os registros do daframe passado como parâmetro à tabela bronze_acidentes
+		Algumas colunas são filtradas para padronização dos múltiplos recursos
+		:param df:
+		:return:
+		"""
 		if df.empty:
 			return
 		df = df[USED_COLS]
@@ -41,6 +52,10 @@ class Loader:
 				logger.error(f"Error caught while inserting records in Bronze: {e}")
 
 	def create_bronze(self):
+		"""
+		Cria a tabela bronze_acidentes no banco duckdb
+		:return:
+		"""
 		if not self.conn:
 			logger.warning("No db connection founded!")
 		else:
@@ -65,6 +80,7 @@ class Loader:
 
 
 	def close(self) -> None:
+		""" Encerra a conexão com o banco duckdb"""
 		if self.conn:
 			self.conn.close()
 			logger.info("Closed duckdb connection successfully!")

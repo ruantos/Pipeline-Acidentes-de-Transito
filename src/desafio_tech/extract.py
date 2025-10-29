@@ -12,6 +12,11 @@ DATASET_ENDPOINT = "http://dados.recife.pe.gov.br/api/3/action/package_show?id=a
 
 
 def get_ids() -> list[str]:
+	"""
+		Faz uma requisição à API do Portal de Dados abertos de Recife pelo dataset
+		'acidentes-de-transito-com-e-sem-vitimas' e retorna uma lista com IDs dos recursos desse dataset
+	:return: list[str]
+	"""
 	try:
 		logger.info("Fetching resources id's...")
 		response = requests.get(url=DATASET_ENDPOINT, timeout=60)
@@ -25,6 +30,12 @@ def get_ids() -> list[str]:
 
 
 def fetch_dataframe(identifier: str) -> pd.DataFrame:
+	"""
+		Faz uma requisição à API do Portal de Dados abertos de Recife
+		Envia uma consulta SQL para retornar todos os registros do recurso do 'identifier' passado como argumento
+	:param identifier:
+	:return:
+	"""
 	wait_time = 5
 	tries = 3
 
@@ -63,6 +74,12 @@ def fetch_dataframe(identifier: str) -> pd.DataFrame:
 
 
 def normalize_cols(df: pd.DataFrame) -> pd.DataFrame:
+	"""
+		Converte o nome de todas as colunas do dataframe para minúsculas para que não haja divergências.
+		Além disso soma valores ao id para que ao concatenar os IDs dos recursos permaneçam únicos.
+	:param df:
+	:return:
+	"""
 	df.columns = [col.lower() for col in df.columns]
 	year = df['data'].iloc[0].split("-")[0]
 	df["_id"] = df["_id"].astype(str) + year + '0'
