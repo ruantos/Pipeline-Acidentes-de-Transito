@@ -58,6 +58,10 @@ As consultas foram escritas para explorar os dados de Sinistros registrados na R
      para otimizar o policiamento, direcionar campanhas de conscientização para os horários de maior risco e planejar
      operações de fiscalização.
    * 
+
+## LOG messages
+Ao longo de todo o projeto foi utilizado a biblioteca nativa do Python `Logging` para exibição de erros e feedbacks durante a execução.
+
 ## Reflexões
 O projeto foi uma ótima oportunidade para exercitar conceitos e ferramentas, como ELT e dbt. O primeiro, já me era conhecido,
 mas sempre foquei em projetos de ETL. O segundo, o dbt, já era uma ferramenta que eu planejo dar mais atenção, visto ser orientada a SQL 
