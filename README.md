@@ -2,6 +2,14 @@
 
 pipeline de dados para análise de acidentes de trânsito na RMR e demais municípios pernambucanos.
 
+
+## Navegação
+- **Relatórios:** ./reports/relatorio.md
+- **Tratamento:** ./dbt_project/models
+- **Consultas:** ./dbt_project/models/gold/*
+- **Script de extração e carregamento:** ./src/desafio-tech/script.py
+- 
+
 ## Descrição
 
 Este projeto implementa um pipeline de dados que extrai, carrega e transforma dados de acidentes de trânsito. A transformação dos dados é feita pelo dbt, seguindo uma arquitetura de medalhão (bronze, silver, gold).
